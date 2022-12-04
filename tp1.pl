@@ -4,124 +4,152 @@
 insere_fim(Insere,[], [Insere]).
 insere_fim(Insere, [H|T], [H|Novo]) :- insere_fim(Insere, T, Novo).
 
-%Q2: Um predicado que insere um elemento em uma determinada posição da lista.
+%Q2: Um predicado que insere um elemento em uma determinada posiÃ§Ã£o da lista.
 insere_lista(Pos,Elemento, [H|T], X) :- insere_listaAux(Pos, Elemento, 1, [H|T], X).
 insere_listaAux(Pos, Elemento, Pos, [H|T], [Elemento|[H|T]]).
 insere_listaAux(Pos, Elemento, Pos, [], [Elemento]).
 insere_listaAux(Pos, Elemento,  Cont, [H|T], [H|T1]) :- ContT is  1+Cont ,insere_listaAux(Pos, Elemento, ContT, T, T1).
 
-%Q3: Um predicado que remove um elemento em uma determinada posição da lista.
+%Q3: Um predicado que remove um elemento em uma determinada posiÃ§Ã£o da lista.
 remove_lista(Pos, [H|T], X) :- remove_listaAux(Pos, 1,[H|T], X).
 remove_listaAux(Pos, Pos, [_|T], T).
 remove_listaAux(Pos, Cont, [H|T], [H|T1]) :- ContT is 1+Cont,remove_listaAux(Pos, ContT, T, T1).
 
-%Q4: Um predicado que retorne o maior valor contido em uma lista numérica.
+%Q4: Um predicado que retorne o maior valor contido em uma lista numÃ©rica.
 max_lista([H],H).
 max_lista([H|T],Max) :- max_lista(T, Max1), (((Max1>=H) -> Max=Max1);((Max1<H)-> Max=H)).
 
-%Q5: Um predicado que escreve uma lista em ordem inversa. Dica: utilize concatenação.
+%Q5: Um predicado que escreve uma lista em ordem inversa. Dica: utilize concatenaÃ§Ã£o.
 inverte_lista([H], [H]).
 inverte_lista([H|T], X) :- inverte_lista(T, X2), insere_fim(H,X2,X).
 
 %%%%%Parte 2%%%%
 
-homem(george).
-homem(spencer).
-homem(philip).
-homem(charles).
-homem(mark).
-homem(andrew).
-homem(edward).
-homem(william).
-homem(harry).
-homem(peter).
-homem(eugenie).
-homem(james).
+% Fatos
+% Sexo
+masculino(george).
+masculino(spencer).
+masculino(charles).
+masculino(philip).
+masculino(mark).
+masculino(andrew).
+masculino(edward).
+masculino(william).
+masculino(harry).
+masculino(peter).
+masculino(eugenie).
+masculino(james).
+feminino(mum).
+feminino(kydd).
+feminino(elizabeth).
+feminino(margaret).
+feminino(diana).
+feminino(anne).
+feminino(sarah).
+feminino(sophie).
+feminino(zara).
+feminino(beatrice).
+feminino(louise).
 
-mulher(mum).
-mulher(kydd).
-mulher(elizabeth).
-mulher(margaret).
-mulher(diana).
-mulher(anne).
-mulher(sarah).
-mulher(sophie).
-mulher(zara).
-mulher(beatrice).
-mulher(louise).
+% Parentesco
+genitor(george, elizabeth).
+genitor(mum, elizabeth).
+genitor(george, margaret).
+genitor(mum, margaret).
+genitor(spencer, diana).
+genitor(kydd, diana).
+genitor(elizabeth, charles).
+genitor(elizabeth, anne).
+genitor(elizabeth, andrew).
+genitor(elizabeth, edward).
+genitor(philip, charles).
+genitor(philip, anne).
+genitor(philip, andrew).
+genitor(philip, edward).
+genitor(diana, william).
+genitor(diana, harry).
+genitor(charles, william).
+genitor(charles, harry).
+genitor(anne, peter).
+genitor(anne, zara).
+genitor(mark, peter).
+genitor(mark, zara).
+genitor(andrew, beatrice).
+genitor(andrew, euginie).
+genitor(sarah, beatrice).
+genitor(sarah, eugenie).
+genitor(edward, louise).
+genitor(edward, james).
+genitor(sophie, louise).
+genitor(sophie, james).
 
-casados(george,mum).
-casados(spencer,kydd).
-casados(elizabeth,philip).
-casados(diana,charles).
-casados(anne,mark).
-casados(andrew,sarah).
-casados(edward,sophie).
-casados(Marido,Esposa) :- casados(Esposa,Marido).
+% Regras
+filho(X, Y) :-
+    genitor(Y, X),
+    masculino(X).
 
-filhaoufilho(charles,elizabeth).
-filhaoufilho(andrew,elizabeth).
-filhaoufilho(edward,elizabeth).
-filhaoufilho(william,charles).
-filhaoufilho(harry,charles).
-filhaoufilho(peter,anne).
-filhaoufilho(eugenie,sarah).
-filhaoufilho(james,sophie).
-filhaoufilho(elizabeth,george).
-filhaoufilho(margaret,george).
-filhaoufilho(diana,kydd).
-filhaoufilho(anne,philip).
-filhaoufilho(zara,mark).
-filhaoufilho(beatrice,sarah).
-filhaoufilho(louise,sophie).
-filhaoufilho(Filho,Pai) :- casados(Pai,Mae), filhaoufilho(Filho,Mae).
+filha(X, Y) :-
+    genitor(Y, X),
+    feminino(X).
 
-netoouneta(Neto, Avo) :- filhaoufilho(Neto,Pai),filhaoufilho(Pai,Avo).
+netoOuNeta(Z, X) :-
+    genitor(Y, Z),
+    genitor(X, Y).
 
-bisavooubisavo(Bisneto,Bisavo) :- netoouneta(Bisneto,Avo),filhaoufilho(Avo, Bisavo).
+bisavoOuBisavo(X, Y) :-
+    genitor(X, Z),
+    genitor(Z, W),
+    genitor(W, Y).
 
-ancestral(Pessoa,Ancestral) :- filhaoufilho(Pessoa,Ancestral);netoouneta(Pessoa,Ancestral);bisavooubisavo(Pessoa,Ancestral).
+irmao(X, Y) :-
+    genitor(Z, X),
+    genitor(Z, Y),
+    masculino(Y),
+    X \== Y.
 
-irmao(Irmao, Irmao2):-homem(Irmao),filhaoufilho(Irmao,Pai),filhaoufilho(Irmao2,Pai).
+irma(X, Y) :-
+    genitor(Z, X),
+    genitor(Z, Y),
+    feminino(Y),
+    X \== Y.
 
-irma(Irma, Irmao2):-mulher(Irma),filhaoufilho(Irma,Pai),filhaoufilho(Irmao2,Pai).
+irmaoOuIrma(X, Y) :-
+    genitor(Z, X),
+    genitor(Z, Y),
+    X \== Y.
 
-irmao_aux(Irmo1,Irmao2):- irmao(Irmo1,Irmao2);irma(Irmo1,Irmao2).
+primoIrmao(X, Y) :-
+    netoOuNeta(X, Z),
+    netoOuNeta(Y, Z),
+    masculino(X),
+    masculino(Y),
+    X \== Y.
 
-filho(Filho,Pai_Mae):-homem(Filho),filhaoufilho(Filho,Pai_Mae).
+tio(X, Y) :-
+    irmao(X, Z),
+    genitor(Z, Y).
 
-filha(Filha,Pai_Mae):-homem(Filha),filhaoufilho(Filha,Pai_Mae).
+tia(X, Y) :-
+    irma(X, Z),
+    genitor(Z, Y).
 
-primoirmao(Primo1, Primo2):-filhaoufilho(Primo1,Pai1),filhaoufilho(Primo2,Pai2),(irmao(Pai1,Pai2);irma(Pai1,Pai2)).
+casados(X, Y) :-
+    genitor(X, Z),
+    genitor(Y, Z).
 
-% cunhado(Cunhado1,Cunhado2):-homem(Cunhado1),((casado(Cunhado1,Irmao),irmao_Aux(Cunhado2,Irmao));(casado(Cunhado2,Irmao),irmao_Aux(Cunhado2,Irmao))).
-%
+cunhado(X, Y) :-
+    casados(Z, X),
+    irmaoOuIrma(Z, Y),
+    masculino(X).
 
-% cunhada(Cunhado1,Cunhado2):-
-% mulher(Cunhado1),((casado(Cunhado1,Irmao),irmao_Aux(Cunhado2,Irmao));(casado(Cunhado2,Irmao),irmao_Aux(Cunhado2,Irmao))).
-%
-
-tia(Tia,Sobrinho):-mulher(Tia),filhaoufilho(Sobrinho, Pai) ,irma(Tia, Pai).
-
-tio(Tio,Sobrinho):-homem(Tio),filhaoufilho(Sobrinho, Pai) ,irmao(Tio, Pai).
-
-
-
-
-
-
-
-
-
-
-
+cunhada(X, Y) :-
+    casados(Z, X),
+    irmaoOuIrma(Z, Y),
+    feminino(X).
 
 
-
-
-
-
-
-
-
-
+ancestral(X, Y) :-
+    genitor(X, Y).
+ancestral(X, Y) :-
+    genitor(Z, X),
+    ancestral(Y, Z).
