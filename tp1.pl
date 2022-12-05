@@ -1,31 +1,31 @@
 %%%%%Parte 1%%%%
 
-%%%%%Parte 1%%%%
-
 %Q1: Um predicado que insere um elemento no final da lista.
 insere_fim(Insere,[], [Insere]).
-%insere_fim(Insere,Elemento, [Elemento|Insere]).
 insere_fim(Insere, [H|T], [H|Novo]) :- insere_fim(Insere, T, Novo).
 
-%Q2: Um predicado que insere um elemento em uma determinada posiÃ§Ã£o da lista.
+% Q2: Um predicado que insere um elemento em uma determinada posição da
+% lista.
 insere_lista(Pos,Elemento, List, X) :- insere_listaAux(Pos, Elemento, 1, List, X).
 insere_listaAux(Pos, Elemento, Pos, [], [Elemento]).
 insere_listaAux(Pos, Elemento, Pos, [H|T], [Elemento|[H|T]]).
 insere_listaAux(Pos, Elemento,  Cont, [H|T], [H|T1]) :- ContT is  1+Cont ,insere_listaAux(Pos, Elemento, ContT, T, T1).
 
-%Q3: Um predicado que remove um elemento em uma determinada posiÃ§Ã£o da lista.
+% Q3: Um predicado que remove um elemento em uma determinada posição da
+% lista.
 remove_lista(Pos, [H|T], X) :- remove_listaAux(Pos, 1,[H|T], X).
 remove_listaAux(Pos, Pos, [_|T], T).
 remove_listaAux(Pos, Cont, [H|T], [H|T1]) :- ContT is 1+Cont,remove_listaAux(Pos, ContT, T, T1).
 
-%Q4: Um predicado que retorne o maior valor contido em uma lista numÃ©rica.
+% Q4: Um predicado que retorne o maior valor contido em uma lista
+% numérica.
 max_lista([H],H).
 max_lista([H|T],Max) :- max_lista(T, Max1), (((Max1>=H) -> Max=Max1);((Max1<H)-> Max=H)).
 
-%Q5: Um predicado que escreve uma lista em ordem inversa. Dica: utilize concatenaÃ§Ã£o.
-inverte_lista([H], [H]).
+% Q5: Um predicado que escreve uma lista em ordem inversa. Dica: utilize
+% concatenação.
+inverte_lista([], []).
 inverte_lista([H|T], X) :- inverte_lista(T, X2), insere_fim(H,X2,X).
-
 
 %%%%%Parte 2%%%%
 
