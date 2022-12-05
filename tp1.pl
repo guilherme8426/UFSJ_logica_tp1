@@ -79,13 +79,30 @@ genitor(anne, zara).
 genitor(mark, peter).
 genitor(mark, zara).
 genitor(andrew, beatrice).
-genitor(andrew, euginie).
+genitor(andrew, eugenie).
 genitor(sarah, beatrice).
 genitor(sarah, eugenie).
 genitor(edward, louise).
 genitor(edward, james).
 genitor(sophie, louise).
 genitor(sophie, james).
+
+casados(george, mum).
+casados(mum, george).
+casados(spencer, kydd).
+casados(kydd, spencer).
+casados(elizabeth, philip).
+casados(philip, elizabeth).
+casados(diana, charles).
+casados(charles, diana).
+casados(anne, mark).
+casados(mark, anne).
+casados(andrew, sarah).
+casados(sarah, andrew).
+casados(edward, sophie).
+casados(sophie, edward).
+
+
 
 % Regras
 filho(X, Y) :-
@@ -108,25 +125,28 @@ bisavoOuBisavo(X, Y) :-
 irmao(X, Y) :-
     genitor(Z, X),
     genitor(Z, Y),
-    masculino(Y),
+    masculino(Z),
+    masculino(X),
     X \== Y.
 
 irma(X, Y) :-
     genitor(Z, X),
     genitor(Z, Y),
-    feminino(Y),
+    masculino(Z),
+    feminino(X),
     X \== Y.
 
 irmaoOuIrma(X, Y) :-
     genitor(Z, X),
     genitor(Z, Y),
+    masculino(Z),
     X \== Y.
 
 primoIrmao(X, Y) :-
     netoOuNeta(X, Z),
     netoOuNeta(Y, Z),
-    masculino(X),
-    masculino(Y),
+    masculino(Z),
+    not(irmaoOuIrma(X,Y)),
     X \== Y.
 
 tio(X, Y) :-
@@ -137,23 +157,19 @@ tia(X, Y) :-
     irma(X, Z),
     genitor(Z, Y).
 
-casados(X, Y) :-
-    genitor(X, Z),
-    genitor(Y, Z).
-
 cunhado(X, Y) :-
-    casados(Z, X),
-    irmaoOuIrma(Z, Y),
+    ((casados(Z, X),irmaoOuIrma(Z, Y));
+    (irmaoOuIrma(Z, X),casados(Z, Y))),
     masculino(X).
 
 cunhada(X, Y) :-
-    casados(Z, X),
-    irmaoOuIrma(Z, Y),
+    ((casados(Z, X),irmaoOuIrma(Z, Y));
+    (irmaoOuIrma(Z, X),casados(Z, Y))),
     feminino(X).
 
 
 ancestral(X, Y) :-
     genitor(X, Y).
 ancestral(X, Y) :-
-    genitor(Z, X),
-    ancestral(Y, Z).
+    genitor(Z, Y),
+   ancestral(X, Z).
