@@ -1,0 +1,69 @@
+instalar bibliotecas: https://docs.arduino.cc/software/ide-v1/tutorials/installing-libraries#manual-installation
+
+criar biblioteca: https://docs.arduino.cc/learn/contributions/arduino-creating-library-guide
+
+
+basico 
+
+int led = 13;
+
+void setup() {
+  // Chama a função pinMode() que configura um pino como entrada ou saída
+  pinMode(led, OUTPUT); // Configura o pino do LED como saída
+}
+
+void loop() {
+  digitalWrite(led, HIGH); // Atribui nível lógico alto ao pino do LED, acendendo-o
+  delay(1000);             // Espera 1000 milissegundos (um segundo)
+  digitalWrite(led, LOW);  // Atribui nível lógico baixo ao pino do LED, apagando-o
+  delay(1000);             // Espera 1000 milissegundos (um segundo)
+
+}
+
+entrada analogica 
+
+int pino = 2;
+int valor = 0;
+void setup()
+{
+  Serial.begin(9600);
+}
+void loop()
+{
+  valor = analogRead(pino);
+  Serial.println(valor);
+}
+
+saida analogica
+
+int entradaPotenciometro = 3
+int LED = 10
+int valor = 0
+
+void setup()
+{
+  pinMode(LED, OUTPUT);
+}
+void loop()
+{
+  valor = analogRead(entradaPotenciometro);
+  analogWrite(LED, valor / 4)
+}
+
+outro de saida
+#define LED 9 // precisa ter saida PWM
+
+int Brilho;
+
+void setup() {
+  pinMode(LED, OUTPUT);  
+  Brilho = 0;
+}
+
+void loop() {
+  analogWrite(LED, Brilho);
+  Brilho+=5;
+  if(Brilho > 255)
+    Brilho = 0;
+  delay(150);
+}
